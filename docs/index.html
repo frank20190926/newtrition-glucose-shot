@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NewTrition Glucose Shot · pouch artwork inspector</title>
+<meta name="description" content="Four-flavor front panel artwork for the NewTrition Glucose Shot pouch: 3D pouch renders, flat print artwork with die-line, presentation sheets and the production file package.">
+<style>
+@font-face{font-family:"Barlow Condensed";src:url(fonts/BarlowCondensed-SemiBold.ttf);font-weight:600;font-display:swap}
+@font-face{font-family:"Barlow Condensed";src:url(fonts/BarlowCondensed-Bold.ttf);font-weight:700;font-display:swap}
+@font-face{font-family:"Barlow Semi Condensed";src:url(fonts/BarlowSemiCondensed-Medium.ttf);font-weight:500;font-display:swap}
+@font-face{font-family:"Barlow Semi Condensed";src:url(fonts/BarlowSemiCondensed-SemiBold.ttf);font-weight:600;font-display:swap}
+@font-face{font-family:"JetBrains Mono";src:url(fonts/JetBrainsMono.ttf);font-weight:100 800;font-display:swap}
+:root{--ink:#262B32;--mute:#55606C;--rule:#B4BBC4;--paper:#ECEEF1;--stage:#DDE1E6;--field:#F6F7F9;--fl:#C41647}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font:500 18px/1.5 "Barlow Semi Condensed",system-ui,sans-serif;font-variant-numeric:tabular-nums}
+main{max-width:1360px;margin:0 auto;padding:0 32px 72px}
+a{color:var(--ink);text-underline-offset:4px}
+.cap{font:600 15px/1.2 "Barlow Condensed",sans-serif;letter-spacing:.14em;text-transform:uppercase}
+.mono{font:500 14px/1.6 "JetBrains Mono",ui-monospace,monospace}
+.mute{color:var(--mute)}
+.mast{display:flex;align-items:baseline;justify-content:space-between;gap:24px;padding:22px 0 14px;border-bottom:1px solid var(--ink)}
+.get{font:600 16px/1 "Barlow Condensed",sans-serif;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;color:#fff;background:var(--ink);padding:13px 18px;border-radius:2px;white-space:nowrap}
+.get:hover{background:#000}
+h1{font:700 clamp(38px,5vw,64px)/1 "Barlow Condensed",sans-serif;letter-spacing:.005em;text-transform:uppercase;margin:44px 0 14px}
+h2{font:600 22px/1.2 "Barlow Condensed",sans-serif;letter-spacing:.14em;text-transform:uppercase;margin:72px 0 18px;padding-bottom:12px;border-bottom:1px solid var(--ink)}
+.lead{max-width:66ch;margin:0 0 34px;color:var(--mute)}
+.insp{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:32px;align-items:start}
+.stage{position:relative;height:min(80vh,880px);min-height:480px;background:var(--stage);overflow:hidden;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none}
+.stage.drag{cursor:grabbing}
+.pan{position:absolute;left:50%;top:50%;transform-origin:0 0;will-change:transform}
+.pan img{display:block;pointer-events:none;-webkit-user-drag:none}
+.pan img[hidden]{display:none}
+.obj{position:relative;filter:drop-shadow(10px 8px 14px rgba(52,58,68,.28))}
+.obj .art{height:100%;width:auto}
+.obj .die{position:absolute;left:-6.383%;top:-2.1246%;width:112.766%;height:104.249%;filter:none}
+.hud{position:absolute;left:14px;bottom:12px;color:var(--mute);pointer-events:none}
+fieldset{border:0;padding:0;margin:0 0 26px}
+legend{padding:0;margin-bottom:10px}
+.seg{display:grid;gap:0}
+.seg.two{grid-template-columns:1fr 1fr}
+.seg button{font:600 17px/1 "Barlow Condensed",sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);background:var(--field);border:1px solid var(--ink);padding:13px 12px;margin:-1px 0 0 0;cursor:pointer;text-align:left;display:flex;align-items:center;gap:12px;border-radius:0}
+.seg.two button{justify-content:center;margin:0 0 0 -1px}
+.seg.two button:first-child{margin-left:0}
+.seg button:first-child{margin-top:0}
+.seg button i{display:block;width:16px;height:16px;flex:none}
+.seg button[aria-pressed=true]{background:var(--ink);color:#fff}
+.seg button:hover:not([aria-pressed=true]){background:#fff}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(--fl);outline-offset:2px}
+.zoom{display:grid;grid-template-columns:52px 1fr 52px auto;gap:0;align-items:stretch}
+.zoom button{font:600 17px/1 "Barlow Condensed",sans-serif;letter-spacing:.1em;text-transform:uppercase;background:var(--field);color:var(--ink);border:1px solid var(--ink);padding:12px 0;cursor:pointer;border-radius:0}
+.zoom button:hover{background:#fff}
+.zoom output{display:flex;align-items:center;justify-content:center;border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);background:var(--field)}
+.zoom .fit{padding:12px 14px;margin-left:10px}
+.chk{display:flex;align-items:center;gap:10px;margin:-10px 0 26px}
+.chk input{width:18px;height:18px;accent-color:var(--ink);margin:0}
+.chk[hidden]{display:none}
+table{border-collapse:collapse;width:100%}
+th{font:600 14px/1.2 "Barlow Condensed",sans-serif;letter-spacing:.14em;text-transform:uppercase;text-align:left;padding:10px 14px 10px 0;border-bottom:1px solid var(--ink)}
+td{padding:11px 14px 11px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+td.n,th.n{text-align:right;padding-right:0;padding-left:32px;white-space:nowrap}
+.ink td{padding:8px 10px 8px 0}
+.ink td:first-child{width:26px}
+.ink i{display:block;width:18px;height:34px}
+.key{display:grid;gap:7px;margin:0;padding:0;list-style:none}
+.key li{display:flex;align-items:center;gap:12px}
+.key svg{flex:none}
+.sheets{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:30px}
+figure{margin:0}
+figure img{width:100%;height:auto;display:block}
+figcaption{display:flex;justify-content:space-between;gap:16px;padding-top:10px}
+.scroll{overflow-x:auto}
+footer{margin-top:64px;padding-top:16px;border-top:1px solid var(--ink)}
+@media(max-width:980px){.insp{grid-template-columns:1fr}.stage{height:70vh}.sheets{grid-template-columns:1fr}main{padding:0 18px 56px}.mast{flex-wrap:wrap}}
+</style>
+</head>
+<body>
+<main>
+<div class="mast">
+  <span class="cap">NewTrition® — Glucose Shot packaging identity</span>
+  <a class="get" href="downloads/NewTrition_Glucose_Shot_Master_Package.zip" download>Download master package (.zip)</a>
+</div>
+
+<h1>Glucose Shot, four flavors</h1>
+<p class="lead">Front panel artwork for Wild Berry, Grape, Blue Raspberry and Mystic Melon, wrapped onto the supplied 3D pouch rendering. The colored header with the N emblem, NEWTRITION® wordmark, tagline, tear tab and silver collar is your original artwork and stays where it is. Pick a flavor, switch between the pouch and the flat print artwork, and zoom in to check the type.</p>
+
+<div class="insp">
+  <div class="stage" id="stage" aria-label="Artwork viewer. Drag to move, scroll or use the zoom buttons to magnify.">
+    <div class="pan" id="pan"><div class="obj" id="obj"><img class="art" id="art" alt=""><img class="die" id="die" src="assets/dieline_overlay.svg" alt="" hidden></div></div>
+    <div class="hud mono" id="hud"></div>
+  </div>
+
+  <div>
+    <fieldset><legend class="cap">Flavor</legend><div class="seg" id="flv"></div></fieldset>
+    <fieldset><legend class="cap">View</legend><div class="seg two" id="view">
+      <button type="button" data-v="pouch" aria-pressed="true">3D pouch</button><button type="button" data-v="flat" aria-pressed="false">Flat print</button></div></fieldset>
+    <label class="chk" id="dierow" hidden><input type="checkbox" id="diechk" checked><span>Show die-line, bleed and safety</span></label>
+    <fieldset><legend class="cap">Zoom</legend><div class="zoom">
+      <button type="button" id="zo" aria-label="Zoom out">−</button><output class="mono" id="zv">100%</output><button type="button" id="zi" aria-label="Zoom in">+</button><button type="button" class="fit" id="zf">Fit</button></div></fieldset>
+
+    <div class="cap" style="margin-bottom:8px">Flavor inks</div>
+    <table class="ink mono"><tbody id="inks"></tbody></table>
+
+    <div class="cap" style="margin:28px 0 8px">Type hierarchy, cap height</div>
+    <table class="mono"><tbody>
+      <tr><td>GLUCOSE</td><td class="n">8.1 mm</td></tr>
+      <tr><td>SHOT</td><td class="n">13.9 mm</td></tr>
+      <tr><td>15g</td><td class="n">6.6 mm</td></tr>
+      <tr><td>15g : title mean</td><td class="n">0.60 : 1</td></tr>
+    </tbody></table>
+
+    <div id="keybox" hidden>
+    <div class="cap" style="margin:28px 0 10px">Line key</div>
+    <ul class="key">
+      <li><svg width="56" height="6"><line x1="0" y1="3" x2="56" y2="3" stroke="#C2185B" stroke-width="2.5"/></svg>Die line / trim, 47.0 × 141.2 mm</li>
+      <li><svg width="56" height="6"><line x1="0" y1="3" x2="56" y2="3" stroke="#0277BD" stroke-width="1.8"/></svg>Bleed, 3.0 mm</li>
+      <li><svg width="56" height="6"><line x1="0" y1="3" x2="56" y2="3" stroke="#2E7D32" stroke-width="1.8" stroke-dasharray="9 5"/></svg>Safety, 3.0 mm</li>
+      <li><svg width="56" height="6"><line x1="0" y1="3" x2="56" y2="3" stroke="#262B32" stroke-width="1.6" stroke-dasharray="12 4 2 4"/></svg>Tear line</li>
+      <li><svg width="56" height="14"><rect x=".5" y=".5" width="55" height="13" fill="none" stroke="#262B32"/><path d="M4 14 18 0M14 14 28 0M24 14 38 0M34 14 48 0M44 14 56 2" stroke="#262B32" stroke-width="1"/></svg>Bottom heat seal, 5.4 mm</li>
+    </ul></div>
+  </div>
+</div>
+
+<h2>Presentation sheets</h2>
+<div class="sheets" id="sheets"></div>
+
+<h2>Master package</h2>
+<div class="scroll">
+<table>
+  <thead><tr><th>Folder / file</th><th>Contents</th><th>Format</th><th class="n">Files</th><th class="n">Size</th></tr></thead>
+  <tbody>
+    <tr><td class="mono">01_3D_Pouch_Renders</td><td>4 single pouches, 4-flavor line-up, counter display</td><td>PNG, transparent</td><td class="n mono">6</td><td class="n mono" id="rsz">1040 × 2888 · 3980 × 2888 · 2400 × 2160 px</td></tr>
+    <tr><td class="mono">02_Print_Ready_Outlined_Vectors</td><td>Front panel per flavor, type outlined, CMYK, 3 mm bleed</td><td>.ai .eps .pdf .svg</td><td class="n mono">16</td><td class="n mono">53.0 × 147.2 mm page</td></tr>
+    <tr><td class="mono">03_Editable_Layered_SVGs</td><td>Front panel per flavor, live text, named layers</td><td>.svg</td><td class="n mono">4</td><td class="n mono">47.0 × 141.2 mm trim</td></tr>
+    <tr><td class="mono">04_HighRes_Flat_Artwork_PNG</td><td>Front panel per flavor, trim view</td><td>PNG, transparent</td><td class="n mono">4</td><td class="n mono">1880 × 5648 px</td></tr>
+    <tr><td class="mono"><a href="downloads/NewTrition_Glucose_Shot_Presentation.pdf">NewTrition_Glucose_Shot_Presentation.pdf</a></td><td>The four sheets above</td><td>PDF</td><td class="n mono">1</td><td class="n mono">4 pages</td></tr>
+    <tr><td class="mono"><a href="downloads/NewTrition_Glucose_Shot_Master_Package.zip" download>NewTrition_Glucose_Shot_Master_Package.zip</a></td><td>Everything listed here</td><td>ZIP</td><td class="n mono">31</td><td class="n mono"></td></tr>
+  </tbody>
+</table>
+</div>
+
+<footer class="mono mute">NewTrition Glucose Shot, Freelancer contest #2801092. Pouch shape, header artwork and silver collar come from the client's 3D size rendering. Type set in Barlow Condensed and Montserrat (SIL OFL), outlined in the print masters.</footer>
+</main>
+
+<script>
+const FL=[
+ {id:"wild_berry",name:"Wild Berry",inks:[["Primary","#C41647","C16 M100 Y68 K4","PMS 193 C"],["Deep","#590820","C38 M96 Y70 K57","PMS 7421 C"]]},
+ {id:"grape",name:"Grape",inks:[["Primary","#561D7E","C81 M100 Y14 K5","PMS 2607 C"],["Deep","#26093D","C86 M98 Y37 K54","PMS 2765 C"]]},
+ {id:"blue_raspberry",name:"Blue Raspberry",inks:[["Primary","#0052CC","C88 M72 Y0 K0","PMS 2728 C"],["Deep","#041E4E","C100 M93 Y37 K40","PMS 2768 C"]]},
+ {id:"mystic_melon",name:"Mystic Melon",inks:[["Primary","#007D4A","C88 M26 Y90 K13","PMS 7726 C"],["Deep","#063B25","C86 M47 Y85 K59","PMS 3435 C"]]}];
+const SHEETS=[["Board_01_Hero_Lineup","01 · Four-flavor line-up"],["Board_02_Four_Flavor_3D_Pouches","02 · Four flavors on the client pouch"],["Board_03_Flat_Print_Dielines","03 · Flat print artwork and die-line"],["Board_04_Retail_Shelf_Presence","04 · Counter display and shelf read"]];
+const DIM={pouch:[1040,2888],flat:[1880,5648]};
+const $=id=>document.getElementById(id);
+const stage=$("stage"),pan=$("pan"),obj=$("obj"),art=$("art"),die=$("die");
+let fl=0,view="pouch",z=1,px=0,py=0,base=1;
+
+function fit(){ // object height = 90 % of the stage at zoom 1
+  const [w,h]=DIM[view];
+  const H=stage.clientHeight*0.9,W=Math.min(H*w/h,stage.clientWidth*0.9);
+  base=W*h/w; obj.style.height=base+"px"; obj.style.width=W+"px";
+  return [W,base];
+}
+function draw(){
+  const [W,H]=[obj.offsetWidth,obj.offsetHeight];
+  pan.style.transform=`translate(${px-W*z/2}px,${py-H*z/2}px) scale(${z})`;
+  $("zv").textContent=Math.round(z*100)+"%";
+  const [w,h]=DIM[view];
+  $("hud").textContent=`${FL[fl].name} · ${view==="pouch"?"3D pouch render":"flat print artwork"} · ${w} × ${h} px source · ${Math.round(H*z/h*100)}% of source pixels`;
+}
+function clamp(){
+  const W=obj.offsetWidth*z,H=obj.offsetHeight*z,mx=Math.max(0,(W-stage.clientWidth)/2+60),my=Math.max(0,(H-stage.clientHeight)/2+60);
+  px=Math.max(-mx,Math.min(mx,px)); py=Math.max(-my,Math.min(my,py));
+}
+function zoomTo(nz,cx,cy){ // cx, cy relative to the stage centre
+  nz=Math.max(1,Math.min(8,nz));
+  px=cx-(cx-px)*nz/z; py=cy-(cy-py)*nz/z; z=nz; clamp(); draw();
+}
+function load(){
+  const f=FL[fl];
+  art.src=`assets/${view==="pouch"?"pouch":"flat"}_${f.id}.png`;
+  art.alt=`${f.name} Glucose Shot, ${view==="pouch"?"3D pouch":"flat front panel artwork"}`;
+  die.hidden=!(view==="flat"&&$("diechk").checked);
+  $("dierow").hidden=view!=="flat"; $("keybox").hidden=view!=="flat";
+  document.documentElement.style.setProperty("--fl",f.inks[0][1]);
+  $("inks").innerHTML=f.inks.map(k=>`<tr><td><i style="background:${k[1]}"></i></td><td>${k[0]}<br><span class="mute">${k[3]}</span></td><td class="n">${k[1]}<br><span class="mute">${k[2]}</span></td></tr>`).join("");
+  document.querySelectorAll("#flv button").forEach((b,i)=>b.setAttribute("aria-pressed",i===fl));
+  document.querySelectorAll("#view button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.v===view));
+  fit(); clamp(); draw();
+}
+$("flv").innerHTML=FL.map((f,i)=>`<button type="button" data-i="${i}"><i style="background:${f.inks[0][1]}"></i>${f.name}</button>`).join("");
+$("flv").addEventListener("click",e=>{const b=e.target.closest("button"); if(b){fl=+b.dataset.i; load();}});
+$("view").addEventListener("click",e=>{const b=e.target.closest("button"); if(b){view=b.dataset.v; z=1;px=py=0; load();}});
+$("diechk").addEventListener("change",load);
+$("zi").onclick=()=>zoomTo(z*1.5,0,0);
+$("zo").onclick=()=>zoomTo(z/1.5,0,0);
+$("zf").onclick=()=>{z=1;px=py=0;draw();};
+stage.addEventListener("wheel",e=>{e.preventDefault();const r=stage.getBoundingClientRect();
+  zoomTo(z*Math.exp(-e.deltaY*0.0015),e.clientX-r.left-r.width/2,e.clientY-r.top-r.height/2);},{passive:false});
+stage.addEventListener("dblclick",e=>{const r=stage.getBoundingClientRect();
+  zoomTo(z>1.01?1:3,e.clientX-r.left-r.width/2,e.clientY-r.top-r.height/2); if(z===1){px=py=0;draw();}});
+const pts=new Map(); let pd=0;
+stage.addEventListener("pointerdown",e=>{stage.setPointerCapture(e.pointerId);pts.set(e.pointerId,[e.clientX,e.clientY]);stage.classList.add("drag");});
+stage.addEventListener("pointermove",e=>{
+  if(!pts.has(e.pointerId))return; const p=pts.get(e.pointerId);
+  if(pts.size===1){px+=e.clientX-p[0];py+=e.clientY-p[1];clamp();draw();}
+  pts.set(e.pointerId,[e.clientX,e.clientY]);
+  if(pts.size===2){const [a,b]=[...pts.values()],d=Math.hypot(a[0]-b[0],a[1]-b[1]),r=stage.getBoundingClientRect();
+    if(pd)zoomTo(z*d/pd,(a[0]+b[0])/2-r.left-r.width/2,(a[1]+b[1])/2-r.top-r.height/2); pd=d;}
+});
+const up=e=>{pts.delete(e.pointerId);pd=0;if(!pts.size)stage.classList.remove("drag");};
+stage.addEventListener("pointerup",up);stage.addEventListener("pointercancel",up);
+addEventListener("resize",()=>{fit();clamp();draw();});
+{const h=location.hash.slice(1).split("/"),i=FL.findIndex(f=>f.id===h[0]); // #grape/flat/3 opens a flavor, view and zoom directly
+  if(i>=0)fl=i; if(h[1]==="flat"||h[1]==="pouch")view=h[1]; if(+h[2]>1)z=Math.min(8,+h[2]);}
+$("sheets").innerHTML=SHEETS.map(([f,c])=>`<figure><a href="boards/${f}.jpg"><img src="boards/${f}_1200.jpg" width="1200" height="900" loading="lazy" alt="Sheet ${c}"></a><figcaption><span>${c}</span><a class="mono" href="boards/${f}.jpg">3200 × 2400 px</a></figcaption></figure>`).join("");
+load();
+</script>
+</body>
+</html>
